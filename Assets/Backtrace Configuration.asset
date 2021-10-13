@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e908b13f7467f4185f3f45d43568c4, type: 3}
+  m_Name: Backtrace Configuration
+  m_EditorClassIdentifier: 
+  ServerUrl: https://kdysput.in.backtrace.io:6098/post?format=json&token=eb82b3e8cadb0c2f82668682e69f59b38e0a853bed941e08e85f4bf5eb2c5458
+  Token: 
+  ReportPerMin: 0
+  DisableInEditor: 1
+  HandleUnhandledExceptions: 1
+  IgnoreSslValidation: 1
+  DestroyOnLoad: 0
+  Sampling: 0.01
+  ReportFilterType: 0
+  GameObjectDepth: -1
+  NumberOfLogs: 10
+  PerformanceStatistics: 1
+  SendUnhandledGameCrashesOnGameStartup: 1
+  CaptureNativeCrashes: 1
+  HandleANR: 1
+  OomReports: 0
+  ClientSideUnwinding: 1
+  SymbolsUploadToken: 
+  DeduplicationStrategy: 3
+  EnableBreadcrumbsSupport: 1
+  BacktraceBreadcrumbsLevel: 31
+  LogLevel: 15
+  UseNormalizedExceptionMessage: 0
+  MinidumpType: 524286
+  GenerateScreenshotOnException: 1
+  AttachmentPaths: []
+  DatabasePath: ${Application.persistentDataPath}/backtrace/database
+  EnableMetricsSupport: 1
+  TimeIntervalInMin: 30
+  Enabled: 1
+  AddUnityLogToReport: 1
+  AutoSendMode: 1
+  CreateDatabase: 1
+  MaxRecordCount: 0
+  MaxDatabaseSize: 0
+  RetryInterval: 60
+  RetryLimit: 3
+  RetryOrder: 0
