@@ -1,10 +1,8 @@
 ﻿using Backtrace.Unity;
 using System;
-using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets;
 using System.Runtime.InteropServices;
 using UnityEngine.SceneManagement;
 using Unity.Collections.LowLevel.Unsafe;
@@ -20,26 +18,10 @@ public class StartupSceneController : MonoBehaviour
     private BacktraceClient _client;
 
     bool _handled = false;
-    private void Application_lowMemory()
-    {
-        if (_handled)
-        {
-            Debug.LogWarning("letting it crash");
-            _doOom = true;
-            return;
-        }
-
-        _doOom = false;
-        _handled = true;
-        _textures.Clear();
-        Resources.UnloadUnusedAssets();
-        _client.Send("Ok, we received a memory warning");
-    }
 
     public void Start()
     {
         _client = BacktraceClient.Instance;
-        //_client.Send("Startup", attributes: new Dictionary<string, string> { { "testtest", Time.time.ToString() } });
     }
     public void HandledException()
     {
@@ -62,7 +44,7 @@ public class StartupSceneController : MonoBehaviour
         _client.Breadcrumbs.Exception("exception", attributes);
         try
         {
-            //_client.Metrics.AddSummedEvent("handle-execption", null);
+            _client.Metrics.AddSummedEvent("handle-execption", null);
             Debug.LogError("Throwing a handled exception object");
             InternalFileReader();
         }
@@ -71,40 +53,31 @@ public class StartupSceneController : MonoBehaviour
             _client.Send(e, attributes: attributes);
         }
         _client.Send("foo-bar");
-        //_client.Session.Send();
+        _client.Metrics.Send();
     }
 
     public void UnhandledException()
     {
         _client[LastAction] = "UNHANDLED exception";
-        Debug.LogWarning("Throwing an unhandled exception ✅🔮⛱😂object!^㊛ﺅɏ耀借俠⃐㫪ၩ�\b〫鴰䌯尺;C:\\Program Files (x86)\\Wi");
+        Debug.LogWarning("Throwing an unhandled exception. Specific character test: ✅🔮⛱😂object!^㊛ﺅɏ耀借俠⃐㫪ၩ�\b〫鴰䌯尺;");
 
+#if UNITY_ANDROID
         string backtraceCrashHelperPath = string.Format("{0}.{1}", "backtrace.io.backtrace_unity_android_plugin", "BacktraceCrashHelper");
         var backtraceCrashHelper = new AndroidJavaObject(backtraceCrashHelperPath);
-        //throwBackgroundJvmException
-        backtraceCrashHelper.Call("triggerAnr");
-        backtraceCrashHelper.Call("throwBackgroundJvmException");
-        backtraceCrashHelper.Call("throwJvmException");
-
+        backtraceCrashHelper.Call("throwBackgroundJavaException");
+        backtraceCrashHelper.Call("throwRuntimeException");
+        backtraceCrashHelper.CallStatic("StartAnr");
+#endif
         InternalFileReader();
     }
 
-    private const string BacktraceGameObjectName = "Backtrace";
     public unsafe void Crash()
     {
         _client[LastAction] = "Crash";
 #if UNITY_EDITOR
         return;
-#elif UNITY_ANDROID
-        
-        var size = UnsafeUtility.SizeOf<int>();
-        var alignment = UnsafeUtility.AlignOf<int>();
-        var ptr = UnsafeUtility.Malloc(size, alignment, Allocator.Persistent);
-        UnsafeUtility.Free(ptr, Allocator.Persistent);
-        /* Invalid Operation */
-        UnsafeUtility.Free(ptr, Allocator.Persistent);
 #endif
-        //UnityEngine.Diagnostics.Utils.ForceCrash(UnityEngine.Diagnostics.ForcedCrashCategory.Abort);
+        UnityEngine.Diagnostics.Utils.ForceCrash(UnityEngine.Diagnostics.ForcedCrashCategory.Abort);
     }
 
     public void Oom()
@@ -116,26 +89,10 @@ public class StartupSceneController : MonoBehaviour
 #elif !UNITY_EDITOR
         UnityEngine.Diagnostics.Utils.ForceCrash(UnityEngine.Diagnostics.ForcedCrashCategory.AccessViolation);
 #else
-        Debug.LogWarning("Unsupported in Unity editor");
-        Test(count);
-
+        Debug.LogWarning("Unsupported in the Unity editor");
 #endif
-
     }
 
-    public int count = 200;
-
-    void Test(int count)
-    {
-        if (--count >= 0)
-        {
-            Test(count);
-        }
-        else
-        {
-            Debug.LogError("Error message");
-        }
-    }
     private bool _doOom = true;
     private List<Texture2D> _textures = new List<Texture2D>();
     private IEnumerator StartOom()
@@ -153,7 +110,7 @@ public class StartupSceneController : MonoBehaviour
     {
         _client[LastAction] = "ANR";
 #if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE_WIN
-        Debug.LogWarning("Starting ANR in managed Unity thread.");
+        Debug.LogWarning("Starting ANR in the managed Unity thread.");
         FreezeMainThread();
 #else
         Debug.LogWarning("Anr is unsupported");
@@ -163,7 +120,7 @@ public class StartupSceneController : MonoBehaviour
     public void NextScene()
     {
         _client[LastAction] = "NEXT SCENE";
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(5);
     }
 
     public void Pause()
@@ -183,19 +140,7 @@ public class StartupSceneController : MonoBehaviour
 
     public void Exit()
     {
-        _client[LastAction] = "Exit";
-        //Debug.LogException(new Exception("quit me"));
         Application.Quit();
-
-        //if (BacktraceClient.Instance != null && BacktraceClient.Instance.Enabled)
-        //{
-        //    Destroy(BacktraceDatabase.Instance.gameObject);
-        //    Destroy(BacktraceClient.Instance.gameObject);
-        //}
-        //else
-        //{
-        //    Application.Quit();
-        //}
     }
 
     private void FreezeMainThread()

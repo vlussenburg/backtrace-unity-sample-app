@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e908b13f7467f4185f3f45d43568c4, type: 3}
   m_Name: Backtrace Configuration
   m_EditorClassIdentifier: 
-  ServerUrl: https://kdysput.in.backtrace.io:6098/post?format=json&token=eb82b3e8cadb0c2f82668682e69f59b38e0a853bed941e08e85f4bf5eb2c5458
+  ServerUrl: 
   Token: 
   ReportPerMin: 0
   DisableInEditor: 1
@@ -28,7 +28,7 @@ MonoBehaviour:
   CaptureNativeCrashes: 1
   HandleANR: 1
   OomReports: 0
-  ClientSideUnwinding: 1
+  ClientSideUnwinding: 0
   SymbolsUploadToken: 
   DeduplicationStrategy: 3
   EnableBreadcrumbsSupport: 1

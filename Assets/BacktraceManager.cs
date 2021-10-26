@@ -1,95 +1,14 @@
 ﻿using Backtrace.Unity;
 using Backtrace.Unity.Model;
 using Backtrace.Unity.Model.Breadcrumbs;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class BacktraceManager : MonoBehaviour
 {
     BacktraceClient _client;
     private const string BacktraceGameObjectName = "Backtrace";
-
-    // Start is called before the first frame update
-    //    void Start()
-    //    {
-    //        var attributes = new Dictionary<string, string>()
-    //        {
-    //            { "author", "Konrad" },
-    //            { "project-name", "backtrace-unity validation" },
-    //            { "pid", System.Diagnostics.Process.GetCurrentProcess().Id.ToString() },
-    //            { "test-nullable-variable", null },
-    //            { "test-empty-variable", null },
-    //            { "long-string", GetReallyLongString() },
-    //            {"hostname", "test-Konrad" },
-    //        };
-    //        _client = GameObject.Find(BacktraceGameObjectName)?.GetComponent<BacktraceClient>();
-    //        Application.logMessageReceived += Application_logMessageReceived;
-    //        if (_client == null)
-    //        {
-    //            var text = $"Super quality text that I'm saving on hard drive with new Date time on startup {DateTime.Now}";
-    //            var path = Path.Combine(Application.persistentDataPath, "data.txt");
-    //            var fakeBreadcrumbPath = Path.Combine(Application.persistentDataPath, "bt-breadcrumbs-0");
-    //            File.WriteAllText(path, text);
-    //            File.WriteAllText(fakeBreadcrumbPath, text);
-
-
-    //            Debug.Log("Initializing Backtrace client via API interface");
-    //            var configuration = ScriptableObject.CreateInstance<BacktraceConfiguration>();
-    //            configuration.ServerUrl = "https://kdysput.in.backtrace.io:6098/post?format=json&token=eb82b3e8cadb0c2f82668682e69f59b38e0a853bed941e08e85f4bf5eb2c5458";
-    //            //configuration.IgnoreSslValidation = true;
-    //            //configuration.ServerUrl = "https://submit.backtrace.io/cd03/a6e36d208d08f5e9a3a8a1a0276bae6afb7464e85e78c57a34d3fa50c1524530/json";
-    //            //configuration.ServerUrl = "https://submit.backtrace.io/yolo/533c6e267998b8562e4b878c891bf7fc509beec7839f991bdaa1d43220d0f497/json";
-
-    //            configuration.Enabled = true;
-    //            configuration.PerformanceStatistics = true;
-
-    //            configuration.EnableMetricsSupport = true;
-
-    //            var databasePath = "${Application.persistentDataPath}/backtrace";
-    //            configuration.DatabasePath = databasePath;
-    //            configuration.CreateDatabase = true;
-    //            configuration.EnableBreadcrumbsSupport = true;
-    //            configuration.BacktraceBreadcrumbsLevel = BacktraceBreadcrumbType.Configuration | BacktraceBreadcrumbType.Http | BacktraceBreadcrumbType.Log | BacktraceBreadcrumbType.Manual | BacktraceBreadcrumbType.System | BacktraceBreadcrumbType.Navigation;
-    //            configuration.LogLevel = UnityEngineLogLevel.Debug | UnityEngineLogLevel.Error | UnityEngineLogLevel.Fatal | UnityEngineLogLevel.Info | UnityEngineLogLevel.Warning;
-    //#if UNITY_ANDROID
-    //            configuration.OomReports = true;
-    //            configuration.CaptureNativeCrashes = true;
-    //            configuration.SymbolsUploadToken = "f3228a2c0ec3167f9235a0bd039d4ff4ccf9a21b227a5f1156808305f3e7b3b6";
-    //            //configuration.ClientSideUnwinding = true;
-    //#endif
-
-    //            configuration.AttachmentPaths = new string[2] { path, fakeBreadcrumbPath };
-    //            _client = BacktraceClient.Initialize(configuration, attributes, BacktraceGameObjectName);
-    //            //_client.EnableMetrics();
-    //            Debug.Log("foo");
-    //            Debug.Log("foo-1");
-    //            Debug.LogWarning("foo bar");
-    //            Debug.LogWarning("foo bar");
-    //            Debug.LogWarning("foo bar");
-    //            Debug.LogWarning("foo bar");
-
-    //            //_client.Session.AddSessionEvent("startup", null);
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("Backtrace interface initialized via GameObject integration");
-    //            //_client.Metrics.AddUniqueEvent("foo", null);
-    //        }
-    //        _client["foo"] = "bar";
-    //        _client.SetAttributes(attributes);
-    //        if (_client.Database != null)
-    //        {
-    //            //_client.Database.ScreenshotQuality = 5;
-    //            //_client.Database.ScreenshotMaxHeight = 5;
-    //        }
-    //    }
-
-    void Start()
-    {
-        var attributes = new Dictionary<string, string>()
+    private readonly Dictionary<string, string> _attributes = new Dictionary<string, string>()
         {
             {"author", "Konrad" },
             { "project-name", "backtrace-unity validation" },
@@ -98,86 +17,43 @@ public class BacktraceManager : MonoBehaviour
             { "test-empty-variable", null },
             { "long-string", GetReallyLongString() },
         };
+    void Start()
+    {
+        var attributes =
         _client = GameObject.Find(BacktraceGameObjectName)?.GetComponent<BacktraceClient>();
-        Application.logMessageReceived += Application_logMessageReceived;
         if (_client == null)
         {
-            var text = $"Super quality text that I'm saving on hard drive with new Date time on startup {DateTime.Now}";
-            var path = Path.Combine(Application.persistentDataPath, "data.txt");
-            var fakeBreadcrumbPath = Path.Combine(Application.persistentDataPath, "bt-breadcrumbs-0");
-            File.WriteAllText(path, text);
-            File.WriteAllText(fakeBreadcrumbPath, text);
             Debug.Log("Initializing Backtrace client via API interface");
             var configuration = ScriptableObject.CreateInstance<BacktraceConfiguration>();
-            //configuration.ServerUrl = "https://kdysput.in.backtrace.io:6098/post?format=json&token=956d1fbe30f24346f6868cc75115ca49128a5bd3dec2d29cb7c8c23b2e2c8cd3&_mod_sync=1";
-            //configuration.IgnoreSslValidation = true;
-            //configuration.ServerUrl = "https://submit.backtrace.io/cd03/a6e36d208d08f5e9a3a8a1a0276bae6afb7464e85e78c57a34d3fa50c1524530/json";
-            configuration.ServerUrl = "https://kdysput.in.backtrace.io:6098/post?format=json&token=eb82b3e8cadb0c2f82668682e69f59b38e0a853bed941e08e85f4bf5eb2c5458";
-            //configuration.ServerUrl = ""
+            configuration.ServerUrl = "backtrace-server-url";
             configuration.Enabled = true;
             configuration.PerformanceStatistics = true;
             configuration.EnableMetricsSupport = true;
             var databasePath = "${Application.persistentDataPath}/backtrace";
             configuration.DatabasePath = databasePath;
             configuration.CreateDatabase = true;
-            //configuration.EnableBreadcrumbsSupport = true;
+            configuration.EnableBreadcrumbsSupport = true;
             configuration.BacktraceBreadcrumbsLevel = BacktraceBreadcrumbType.Configuration | BacktraceBreadcrumbType.Http | BacktraceBreadcrumbType.Log | BacktraceBreadcrumbType.Manual | BacktraceBreadcrumbType.System | BacktraceBreadcrumbType.Navigation;
             configuration.LogLevel = UnityEngineLogLevel.Debug | UnityEngineLogLevel.Error | UnityEngineLogLevel.Fatal | UnityEngineLogLevel.Info | UnityEngineLogLevel.Warning;
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_IOS
             configuration.OomReports = true;
+            configuration.HandleANR = false;
             configuration.CaptureNativeCrashes = true;
             //   configuration.SymbolsUploadToken = "f3228a2c0ec3167f9235a0bd039d4ff4ccf9a21b227a5f1156808305f3e7b3b6";
             //configuration.ClientSideUnwinding = true;
 #endif
-            configuration.AttachmentPaths = new string[2] { path, fakeBreadcrumbPath };
-            _client = BacktraceClient.Initialize(configuration, attributes, BacktraceGameObjectName);
+            _client = BacktraceClient.Initialize(configuration, _attributes, BacktraceGameObjectName);
             _client.EnableMetrics();
-            Debug.Log("foo");
-            Debug.Log("foo-1");
-            Debug.LogWarning("foo bar");
-            Debug.LogWarning("foo bar");
-            Debug.LogWarning("foo bar");
-            Debug.LogWarning("foo bar");
-            //_client.Session.AddSessionEvent("startup", null);
+            Debug.Log("Successfully started Backtrace client integration");
         }
         else
         {
             Debug.Log("Backtrace interface initialized via GameObject integration");
-            _client["foo"] = "bar";
-            //_client.Metrics.AddUniqueEvent("foo", null);
         }
-        _client.SetAttributes(attributes);
-        if (_client.Database != null)
-        {
-            //_client.Database.ScreenshotQuality = 5;
-            //_client.Database.ScreenshotMaxHeight = 5;
-        }
+        _client.SetAttributes(_attributes);
     }
 
-    private bool _shouldQuitOnNextFrame = false;
-
-    public void Update()
-    {
-        if (_shouldQuitOnNextFrame)
-        {
-            Application.Quit(1);
-        }
-    }
-    private void Application_logMessageReceived(string condition, string stackTrace, LogType type)
-    {
-        if (type == LogType.Exception && condition.Contains("force exit"))
-        {
-            StartCoroutine(JustQuit());
-        }
-    }
-
-    public IEnumerator JustQuit()
-    {
-        yield return new WaitForEndOfFrame();
-        Application.Quit(1);
-    }
-
-    private string GetReallyLongString()
+    private static string GetReallyLongString()
     {
         return @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Leo a diam sollicitudin tempor. Velit egestas dui id ornare arcu. Sed faucibus turpis in eu mi bibendum neque egestas. Nunc sed id semper risus in. Semper auctor neque vitae tempus quam pellentesque. Ac auctor augue mauris augue neque. Rutrum tellus pellentesque eu tincidunt tortor aliquam. Commodo odio aenean sed adipiscing.
 
