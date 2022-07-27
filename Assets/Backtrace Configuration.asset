@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e908b13f7467f4185f3f45d43568c4, type: 3}
   m_Name: Backtrace Configuration
   m_EditorClassIdentifier: 
-  ServerUrl: 
+  ServerUrl: https://submit.backtrace.io/yolo/533c6e267998b8562e4b878c891bf7fc509beec7839f991bdaa1d43220d0f497/json
   Token: 
   ReportPerMin: 0
-  DisableInEditor: 1
+  DisableInEditor: 0
   HandleUnhandledExceptions: 1
   IgnoreSslValidation: 1
   DestroyOnLoad: 0
@@ -25,12 +25,7 @@ MonoBehaviour:
   NumberOfLogs: 10
   PerformanceStatistics: 1
   SendUnhandledGameCrashesOnGameStartup: 1
-  CaptureNativeCrashes: 1
-  HandleANR: 1
-  OomReports: 0
-  ClientSideUnwinding: 0
-  SymbolsUploadToken: 
-  DeduplicationStrategy: 3
+  DeduplicationStrategy: 0
   EnableBreadcrumbsSupport: 1
   BacktraceBreadcrumbsLevel: 31
   LogLevel: 15
@@ -45,7 +40,7 @@ MonoBehaviour:
   AddUnityLogToReport: 1
   AutoSendMode: 1
   CreateDatabase: 1
-  MaxRecordCount: 0
+  MaxRecordCount: 8
   MaxDatabaseSize: 0
   RetryInterval: 60
   RetryLimit: 3
