@@ -1,0 +1,3 @@
+[submodule "Assets/Plugins/backtrace-unity"]
+	path = Assets/Plugins/backtrace-unity
+	url = https://github.com/backtrace-labs/backtrace-unity.git
