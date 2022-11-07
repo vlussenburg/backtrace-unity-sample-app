@@ -44,13 +44,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.nuget.mono-cecil": {
-      "version": "1.10.2",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.unity.test-framework": {
       "version": "1.1.22",
       "depth": 0,
@@ -103,12 +96,11 @@
       "url": "https://packages.unity.com"
     },
     "nuget.mono-cecil": {
-      "version": "1.0.0",
+      "version": "0.1.6-preview",
       "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.1"
-      }
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
